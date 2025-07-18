@@ -1,0 +1,55 @@
+apisix:
+  node_listen: 9080
+  enable_ipv6: false
+  
+  enable_control: true
+  control:
+    ip: "0.0.0.0"
+    port: 9092
+
+deployment:
+  role: traditional
+  role_traditional:
+    config_provider: etcd
+  
+  admin:
+    # Admin API 監聽配置
+    admin_listen:
+      ip: "0.0.0.0"
+      port: 9180
+
+    # Admin API 金鑰配置
+    admin_key:
+      - name: "admin"
+        key: edd1c9f034335f136f87ad84b625c8f1
+        role: admin
+      - name: "viewer"
+        key: 4054f7cf07e344346cd3f287985e76a2
+        role: viewer
+    
+    # 啟用 CORS 支援
+    enable_admin_cors: true
+    
+    # Admin API 的額外安全設定
+    admin_api_mtls:
+      admin_ssl_cert: ""       # SSL 證書路徑 (可選)
+      admin_ssl_cert_key: ""   # SSL 私鑰路徑 (可選)
+      admin_ssl_ca_cert: ""    # CA 證書路徑 (可選)
+    
+    # 允許的客戶端 IP (可選，留空表示允許所有)
+    allow_admin: ["0.0.0.0/0"]
+    
+    # Admin API 版本
+    admin_api_version: "v1"
+
+  etcd:
+    host:
+      - "http://etcd:2379"
+    prefix: "/apisix"
+    timeout: 30
+
+plugin_attr:
+  prometheus:
+    export_addr:
+      ip: "0.0.0.0"
+      port: 9091

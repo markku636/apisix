@@ -1,0 +1,353 @@
+### Create Route api-0001
+PUT http://127.0.0.1:9180/apisix/admin/routes/api-0001
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "uri": "/wms/api/item/1",
+  "name": "/wms/api/item/1",
+  "priority": 10,
+  "methods": ["GET", "POST", "PUT", "DELETE"],
+  "plugins": {
+    "proxy-rewrite": {
+      "regex_uri": ["^/wms/(.*)", "/$1"]
+    }
+  },
+  "upstream": {
+    "type": "roundrobin",
+    "nodes": {
+      "172.22.112.1:1080": 1
+    }
+  }
+}
+
+### Create Route api-0001 
+PUT http://127.0.0.1:9180/apisix/admin/routes/api-0001
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "uri": "/wms/api/item/1",
+  "name": "/wms/api/item/1",
+  "priority": 10,
+  "methods": ["GET", "POST", "PUT", "DELETE"],
+  "plugins": {    
+    "proxy-rewrite": {
+      "regex_uri": ["^/wms/(.*)", "/$1"]
+    }
+  },
+  "upstream": {
+    "type": "roundrobin",
+    "nodes": {
+      "172.22.112.1:1080": 1
+    }
+  }
+}
+
+### Create Route api-0002 
+PUT http://127.0.0.1:9180/apisix/admin/routes/api-0002
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "uri": "/wms/api/item/2",
+  "name": "/wms/api/item/2",
+  "priority": 10,
+  "methods": ["GET", "POST", "PUT", "DELETE"],
+  "plugins": {    
+    "proxy-rewrite": {
+      "regex_uri": ["^/wms/(.*)", "/$1"]
+    }
+  },
+  "upstream": {
+    "type": "roundrobin",
+    "nodes": {
+      "172.22.112.1:1080": 1,
+      "172.22.112.1:1081": 1
+    }
+  }
+}
+
+
+### Create Global Rule for request-id 
+PUT http://127.0.0.1:9180/apisix/admin/global_rules/1
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+"plugins": {
+    "key-auth": {
+      "_meta": {
+        "disable": false
+      }
+    },
+    "request-id": {
+      "_meta": {
+        "disable": false
+      }
+    },
+   "prometheus": {
+          "_meta": {
+            "disable": false
+          }
+    },
+    "udp-logger": {
+      "host": "192.168.201.101",
+      "port": 5000,
+      "custom_fields": {
+        "up_resp_ratelimit_reset": "$upstream_http_ratelimit_reset",
+        "up_resp_ratelimit_minute": "$upstream_http_x_ratelimit_limit_minute",
+        "up_resp_ratelimit_remain": "$upstream_http_ratelimit_remaining",
+        "up_resp_ratelimit_second": "$upstream_http_x_ratelimit_limit_second",
+        "up_resp_ratelimit_day": "$upstream_http_x_ratelimit_limit_day",
+        "upstream_size": "$upstream_response_length",
+        "uri": "$request_uri",
+        "query": "$query_string",
+        "client_ip": "$remote_addr"
+      }
+    }
+  }
+}
+
+### Get Global Rules
+
+GET http://127.0.0.1:9180/apisix/admin/global_rules/1
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+
+
+### Delete Global Rules
+
+DELETE http://127.0.0.1:9180/apisix/admin/global_rules/global-key-auth
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+
+
+
+
+
+
+
+
+### Create consumer 
+### 建立 Consumer Group：free
+PUT http://localhost:9180/apisix/admin/consumer_groups/free
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "limit-count": {
+      "count": 100,
+      "time_window": 86400,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+### 建立 Consumer Group：standard
+PUT http://localhost:9180/apisix/admin/consumer_groups/standard
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "limit-count": {
+      "count": 1000,
+      "time_window": 86400,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+
+### 建立 Consumer Group：advance
+PUT http://localhost:9180/apisix/admin/consumer_groups/advance
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "limit-count": {
+      "count": 10000,
+      "time_window": 86400,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+### 建立 Consumer Group：business
+PUT http://localhost:9180/apisix/admin/consumer_groups/business
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "limit-count": {
+      "count": 100000,
+      "time_window": 86400,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+
+
+
+### 建立 Plugin Config：free - 每天100次
+PUT http://localhost:9180/apisix/admin/plugin_configs/free_ratelimit
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "key-auth": {},
+    "limit-count": {
+      "count": 100,
+      "time_window": 1,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+### Plugin Config：standard - 每天1000次
+PUT http://localhost:9180/apisix/admin/plugin_configs/standard_ratelimit
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "key-auth": {},
+    "limit-count": {
+      "count": 1000,
+      "time_window": 1,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+### Plugin Config：advance - 每天10000次
+PUT http://localhost:9180/apisix/admin/plugin_configs/advance_ratelimit
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "key-auth": {},
+    "limit-count": {
+      "count": 10000,
+      "time_window": 1,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+### Plugin Config：business - 每天100000次
+PUT http://localhost:9180/apisix/admin/plugin_configs/business_ratelimit
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "plugins": {
+    "key-auth": {},
+    "limit-count": {
+      "count": 100000,
+      "time_window": 1,
+      "rejected_code": 429,
+      "key": "consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_password": "",
+      "redis_database": 0
+    }
+  }
+}
+
+
+### 建立 Consumer：mark，屬於 standard 群組
+
+PUT http://localhost:9180/apisix/admin/consumers/mark
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "username": "mark",
+  "plugins": {
+    "key-auth": {
+      "key": "mark-key-123"
+    }
+  },
+  "group_id": "standard"
+}
+
+
+### 建立 Consumer：ivy，屬於 free 群組
+
+
+PUT http://localhost:9180/apisix/admin/consumers/ivy
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "username": "ivy",
+  "plugins": {
+    "key-auth": {
+      "key": "ivy-key-123"
+    }
+  },
+  "group_id": "free"
+}
+
+### mark - 測試 /wms/api/item/1
+GET http://localhost:9080/wms/api/item/1
+apikey: mark-key-123
+
+### mark - 測試 /wms/api/item/2
+GET http://localhost:9080/wms/api/item/2
+apikey: mark-key-123
+
+
+### ivy - 測試 /wms/api/item/1
+GET http://localhost:9080/wms/api/item/1
+apikey: ivy-key-123
