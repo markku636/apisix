@@ -1,16 +1,30 @@
-### Create Route api-0001
-PUT http://127.0.0.1:9180/apisix/admin/routes/api-0001
+PUT http://127.0.0.1:9180/apisix/admin/routes/standard-1
 X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
 Content-Type: application/json
 
 {
-  "uri": "/wms/api/item/1",
-  "name": "/wms/api/item/1",
+  "uris": [
+    "/standard/wms/api/item/1",
+    "/standard/wms/api/item/2",
+    "/standard/wms/api/item/3"
+  ],
+  "name": "standard",
   "priority": 10,
   "methods": ["GET", "POST", "PUT", "DELETE"],
   "plugins": {
     "proxy-rewrite": {
-      "regex_uri": ["^/wms/(.*)", "/$1"]
+      "regex_uri": ["^/standard/wms/(.*)", "/$1"]
+    },
+    "limit-count": {
+      "count": 100,
+      "time_window": 86400,
+      "rejected_code": 429,
+      "key": "$uri|$consumer_name",
+      "policy": "redis",
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_timeout": 1000,
+      "redis_database": 0
     }
   },
   "upstream": {
@@ -20,6 +34,7 @@ Content-Type: application/json
     }
   }
 }
+
 
 ### Create Route api-0001 
 PUT http://127.0.0.1:9180/apisix/admin/routes/api-0001

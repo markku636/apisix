@@ -12,11 +12,11 @@ services:
       etcd:
         condition: service_healthy
     ports:
-      - "9080:9080/tcp"   # HTTP 業務流量代理服務 (主要 API Gateway 入口)
-      - "9091:9091/tcp"   # Prometheus 監控指標端口 (metrics 收集)
-      - "9443:9443/tcp"   # HTTPS 業務流量代理服務 (SSL/TLS 入口)
-      - "9092:9092/tcp"   # Control API 控制接口端口
-      - "9180:9180/tcp"   # Admin API 管理端口 (配置管理界面)
+      - "9080:9080/tcp"
+      - "9091:9091/tcp"
+      - "9443:9443/tcp"
+      - "9092:9092/tcp"
+      - "9180:9180/tcp"
       
     networks:
       - apisix
@@ -50,7 +50,7 @@ services:
       start_period: 30s
 
   apisix-dashboard:
-    image: bitnami/apisix-dashboard:sha256-0b1a1e5528898b0846cfad9eaf922a3874e49c60204c720829ac8eef925c2fcc
+    image: apache/apisix-dashboard:3.0.1-alpine
 
     container_name: apisix-dashboard
     restart: unless-stopped
