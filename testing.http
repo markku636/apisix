@@ -1,4 +1,5 @@
-PUT http://127.0.0.1:9180/apisix/admin/routes/standard-1
+### Create Route standard-1-47-wms
+PUT http://127.0.0.1:9180/apisix/admin/routes/standard-1-47-wms
 X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
 Content-Type: application/json
 
@@ -6,26 +7,63 @@ Content-Type: application/json
   "uris": [
     "/standard/wms/api/item/1",
     "/standard/wms/api/item/2",
-    "/standard/wms/api/item/3"
+    "/standard/wms/api/item/3",
+    "/standard/wms/api/item/4",
+    "/standard/wms/api/item/5",
+    "/standard/wms/api/item/6",
+    "/standard/wms/api/item/7",
+    "/standard/wms/api/item/8",
+    "/standard/wms/api/item/9",
+    "/standard/wms/api/item/10",
+    "/standard/wms/api/item/11",
+    "/standard/wms/api/item/12",
+    "/standard/wms/api/item/13",
+    "/standard/wms/api/item/14",
+    "/standard/wms/api/item/15",
+    "/standard/wms/api/item/16",
+    "/standard/wms/api/item/17",
+    "/standard/wms/api/item/18",
+    "/standard/wms/api/item/19",
+    "/standard/wms/api/item/20",
+    "/standard/wms/api/item/21",
+    "/standard/wms/api/item/22",
+    "/standard/wms/api/item/23",
+    "/standard/wms/api/item/24",
+    "/standard/wms/api/item/25",
+    "/standard/wms/api/item/26",
+    "/standard/wms/api/item/27",
+    "/standard/wms/api/item/28",
+    "/standard/wms/api/item/29",
+    "/standard/wms/api/item/30",
+    "/standard/wms/api/item/31",
+    "/standard/wms/api/item/32",
+    "/standard/wms/api/item/33",
+    "/standard/wms/api/item/34",
+    "/standard/wms/api/item/35",
+    "/standard/wms/api/item/36",
+    "/standard/wms/api/item/37"
   ],
-  "name": "standard",
+  "name": "standard-1-47-wms",
   "priority": 10,
   "methods": ["GET", "POST", "PUT", "DELETE"],
   "plugins": {
-    "proxy-rewrite": {
-      "regex_uri": ["^/standard/wms/(.*)", "/$1"]
-    },
-    "limit-count": {
-      "count": 100,
-      "time_window": 86400,
-      "rejected_code": 429,
-      "key": "$uri|$consumer_name",
-      "policy": "redis",
+    "limit-count": {      
+      "time_window": 60,
+      "count": 100,      
+      "rejected_code": 429,            
+      "key_type": "var",
+      "key": "$consumer_name",
+      "group":"standard-1-47",
+      "policy": "redis",      
       "redis_host": "192.168.201.101",
       "redis_port": 6379,
-      "redis_timeout": 1000,
+      "redis_timeout": 1000000,
       "redis_database": 0
+    },
+    "proxy-rewrite": {
+      "regex_uri": ["^/standard/wms/(.*)", "/$1"]
     }
+    
   },
   "upstream": {
     "type": "roundrobin",
@@ -34,6 +72,76 @@ Content-Type: application/json
     }
   }
 }
+
+### Create Route standard-1-47-wmts
+PUT http://127.0.0.1:9180/apisix/admin/routes/standard-1-47-wmts
+X-API-KEY: edd1c9f034335f136f87ad84b625c8f1
+Content-Type: application/json
+
+{
+  "uris": [
+    "/standard/wmts/api/item/38",
+    "/standard/wmts/api/item/39",
+    "/standard/wmts/api/item/40",
+    "/standard/wmts/api/item/41",
+    "/standard/wmts/api/item/42",
+    "/standard/wmts/api/item/43",
+    "/standard/wmts/api/item/44",
+    "/standard/wmts/api/item/45",
+    "/standard/wmts/api/item/46",
+    "/standard/wmts/api/item/47"
+  ],
+  "name": "standard-1-47-wmts",
+  "priority": 10,
+  "methods": ["GET", "POST", "PUT", "DELETE"],
+  "plugins": {
+    "limit-count": {      
+      "time_window": 60,
+      "count": 100,      
+      "rejected_code": 429,            
+      "key_type": "var",
+      "key": "$consumer_name",
+      "group":"standard-1-47",
+      "policy": "redis",      
+      "redis_host": "192.168.201.101",
+      "redis_port": 6379,
+      "redis_timeout": 1000000,
+      "redis_database": 0
+    },
+    "proxy-rewrite": {
+      "regex_uri": ["^/standard/wmts/(.*)", "/$1"]
+    }
+    
+  },
+  "upstream": {
+    "type": "roundrobin",
+    "nodes": {
+      "172.22.112.1:1080": 1
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+### mark - 測試 /wms/api/item/1
+GET http://localhost:9080/standard/wms/api/item/1
+apikey: mark-key-123
+
+
+### mark - 測試 /wms/api/item/2
+GET http://localhost:9080/standard/wms/api/item/2
+apikey: mark-key-123
+
 
 
 ### Create Route api-0001 
@@ -354,13 +462,6 @@ Content-Type: application/json
   "group_id": "free"
 }
 
-### mark - 測試 /wms/api/item/1
-GET http://localhost:9080/wms/api/item/1
-apikey: mark-key-123
-
-### mark - 測試 /wms/api/item/2
-GET http://localhost:9080/wms/api/item/2
-apikey: mark-key-123
 
 
 ### ivy - 測試 /wms/api/item/1

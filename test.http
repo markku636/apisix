@@ -1,0 +1,18 @@
+
+### mark - 測試 /wms/api/item/1
+GET http://localhost:9080/standard/wms/api/item/1
+apikey: mark-key-123
+
+### mark - 測試 /wms/api/item/2
+GET http://localhost:9080/standard/wms/api/item/2
+apikey: mark-key-123
+
+
+### mark - 測試 /wms/api/item/47
+GET http://localhost:9080/standard/wmts/api/item/47
+apikey: mark-key-123
+
+
+### mark - 測試 /wms/api/item/2
+GET http://localhost:9080/wms/api/item/2
+apikey: mark-key-123
